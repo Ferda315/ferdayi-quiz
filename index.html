@@ -4,31 +4,33 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ferdayı Ne Kadar Tanıyorsun?</title>
-  <!-- Korkunç ve glitch fontlar -->
-  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <!-- Modern ve okunabilir fontlar -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
       --main-color: #ff4444;
-      --bg: #0d0912;
+      --bg: #18151c;
       --glitch-color1: #d10000;
       --glitch-color2: #ffea00;
+      --font-main: 'Rubik', Arial, sans-serif;
+      --font-mono: 'Space Mono', monospace;
     }
     body {
       margin: 0; padding: 0;
-      background: var(--bg);
+      background: #140f17;
       color: #fff;
-      font-family: 'UnifrakturCook', 'Share Tech Mono', monospace, cursive;
+      font-family: var(--font-main);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
     }
     #container {
-      background: rgba(12,10,18,0.97);
+      background: var(--bg);
       width: 98vw;
-      max-width: 420px;
+      max-width: 410px;
       border-radius: 18px;
-      box-shadow: 0 0 40px var(--main-color), 0 0 0 9px #1e0b1b inset;
+      box-shadow: 0 0 40px var(--main-color), 0 0 0 8px #1e0b1b inset;
       display: flex;
       flex-direction: column;
       min-height: 84vh;
@@ -38,37 +40,37 @@
       overflow: hidden;
     }
     #intro, #result {
-      font-size: 2.3rem;
+      font-size: 2.1rem;
       text-align: center;
       color: var(--main-color);
       margin: 0;
-      padding: 48px 16px 30px 16px;
+      padding: 42px 12px 28px 12px;
       opacity: 1;
       transition: opacity 1s;
-      font-family: 'UnifrakturCook', cursive;
-      min-height: 120px;
+      font-family: var(--font-mono);
       letter-spacing: 2px;
       width: 100%;
     }
     #question-area {
-      min-height: 80px;
+      min-height: 60px;
       text-align: center;
-      font-size: 1.35rem;
+      font-size: 1.19rem;
       color: #fff;
-      font-weight: bold;
-      letter-spacing: 0.7px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
       display: none;
       margin: 0 0 12px 0;
-      padding: 28px 18px 12px 18px;
+      padding: 24px 12px 10px 12px;
       width: 100%;
-      font-family: 'Share Tech Mono', monospace;
+      font-family: var(--font-main);
       position: relative;
       z-index: 2;
+      word-break: break-word;
+      box-sizing: border-box;
     }
     #question-area.glitch {
       animation: glitch 0.32s linear 1;
     }
-    /* Glitch effect */
     @keyframes glitch {
       0% { text-shadow: 2px 0 var(--glitch-color1), -2px 0 var(--glitch-color2); }
       40% { text-shadow: -4px 0 var(--glitch-color2), 4px 0 var(--glitch-color1); }
@@ -78,37 +80,39 @@
     #options {
       display: none;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px 12px;
       justify-content: center;
       width: 100%;
       margin: 0 0 18px 0;
-      min-height: 140px;
-      padding: 0 8px;
+      min-height: 80px;
+      padding: 0 6px;
+      box-sizing: border-box;
     }
     #options button {
-      background: #1a0c13;
+      background: #191019;
       border: 2px solid var(--main-color);
       color: var(--main-color);
-      font-size: 1.08rem;
-      padding: 9px 20px;
+      font-size: 1.04rem;
+      padding: 8px 18px;
       border-radius: 13px;
       cursor: pointer;
-      transition: background 0.22s, color 0.16s, border 0.18s, transform 0.1s;
-      font-family: 'Share Tech Mono', 'UnifrakturCook', cursive;
-      min-width: 120px;
-      margin-bottom: 5px;
+      transition: background 0.17s, color 0.13s, border 0.13s, transform 0.1s;
+      font-family: var(--font-main);
+      min-width: 110px;
+      margin-bottom: 2px;
       outline: none;
       position: relative;
       z-index: 2;
+      word-break: break-word;
+      box-sizing: border-box;
     }
     #options button:hover {
       background: var(--main-color);
-      color: #1a0c13;
+      color: #191019;
       border-color: #fff;
-      font-weight: bold;
-      animation: shake 0.34s linear;
+      font-weight: 700;
+      animation: shake 0.32s linear;
     }
-    /* Shake effect for options */
     @keyframes shake {
       10%, 90% { transform: translateX(-2px); }
       20%, 80% { transform: translateX(3px); }
@@ -116,9 +120,8 @@
       40%, 60% { transform: translateX(5px);}
       100% { transform: translateX(0);}
     }
-    /* Glitch effect for buttons on click */
     #options button.glitch {
-      animation: glitchBtn 0.23s linear 1;
+      animation: glitchBtn 0.18s linear 1;
     }
     @keyframes glitchBtn {
       0% { box-shadow: 2px 0 var(--glitch-color1), -2px 0 var(--glitch-color2);}
@@ -128,98 +131,64 @@
     }
     #nextBtn {
       display: none;
-      margin: 12px auto 0 auto;
+      margin: 10px auto 0 auto;
       background: #16000c;
       border: 2px solid var(--main-color);
       color: var(--main-color);
       border-radius: 12px;
-      padding: 10px 30px;
-      font-size: 1.12rem;
-      font-family: 'Share Tech Mono', monospace;
+      padding: 9px 28px;
+      font-size: 1.06rem;
+      font-family: var(--font-main);
       cursor: pointer;
-      transition: background 0.2s, color 0.18s, border 0.18s;
+      transition: background 0.15s, color 0.11s, border 0.13s;
       font-weight: bold;
-      box-shadow: 0 0 12px #d10000;
+      box-shadow: 0 0 9px #d10000;
+      word-break: break-word;
     }
     #nextBtn:hover {
       background: var(--main-color);
       color: #16000c;
       border-color: #fff;
-      animation: shake 0.3s linear;
+      animation: shake 0.25s linear;
     }
     #chat {
-      flex: 1;
-      overflow-y: auto;
       display: none;
-      flex-direction: column;
-      max-height: 180px;
-      margin: 0 0 18px 0;
-      padding: 0 10px;
-      width: 100%;
     }
-    .message {
-      max-width: 85%;
-      margin: 10px 0;
-      padding: 10px 12px;
-      border-radius: 16px;
-      font-size: 1.08rem;
-      line-height: 1.4;
-      animation: fadeIn 0.3s ease forwards;
-      opacity: 0;
-      background: #110a10;
-      color: #fff;
-      border: 1px solid #3a1313;
-      font-family: 'Share Tech Mono', monospace;
-    }
-    .bot {
-      align-self: flex-start;
-      border-top-left-radius: 0;
-      border: 1px solid var(--main-color);
-      color: var(--main-color);
-    }
-    .user {
-      align-self: flex-end;
-      border-top-right-radius: 0;
-      border: 1px solid #444;
-      color: #fff;
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+    .message, .user, .bot { display: none !important; }
     #result {
       color: var(--main-color);
-      font-size: 2.1rem;
-      font-family: 'UnifrakturCook', cursive;
-      padding: 40px 16px 32px 16px;
-      min-height: 150px;
+      font-family: var(--font-mono);
+      padding: 34px 8px 22px 8px;
+      min-height: 90px;
+      font-size: 1.5rem;
     }
-    /* Mobil uyum */
     @media (max-width: 500px) {
       #container {
         max-width: 99vw;
-        padding: 0;
       }
       #intro, #result {
-        font-size: 1.5rem;
-        padding: 22px 6px 16px 6px;
-        min-height: 85px;
+        font-size: 1.15rem;
+        padding: 18px 4px 8px 4px;
+        min-height: 50px;
       }
       #question-area {
-        font-size: 1.04rem;
-        padding: 18px 6px 8px 6px;
+        font-size: 0.95rem;
+        padding: 14px 2px 8px 2px;
+        min-height: 40px;
       }
       #options button {
-        min-width: 90px;
-        font-size: 0.97rem;
-        padding: 8px 9px;
+        min-width: 72px;
+        font-size: 0.93rem;
+        padding: 7px 6px;
       }
       #result {
-        font-size: 1.3rem;
-        padding: 22px 8px 18px 8px;
-        min-height: 90px;
+        font-size: 1.07rem;
+        padding: 13px 3px 9px 3px;
+        min-height: 40px;
       }
-      #chat {
-        max-height: 100px;
+      #nextBtn {
+        font-size: 0.97rem;
+        padding: 8px 8px;
       }
     }
     ::selection { background: var(--main-color); color: #fff; }
@@ -231,7 +200,6 @@
 <div id="container">
   <div id="intro">Merhaba</div>
   <div id="question-area"></div>
-  <div id="chat"></div>
   <div id="options"></div>
   <button id="nextBtn">Sonraki Soru</button>
   <div id="result"></div>
@@ -242,7 +210,7 @@
     {q: "En sevdiğim yemek nedir?", a: "Antrikot", options: ["Tavuk", "Balık", "Kebap", "Antrikot"]},
     {q: "En sevdiğim içecek hangisi?", a: "Soda", options: ["Kola", "Ayran", "Soda", "Çay"]},
     {q: "En sevdiğim oyun hangisi?", a: "SCP", options: ["Minecraft", "Valorant", "SCP", "Among Us"]},
-    {q: "En sevdiğim karakter kimdir?", a: "Lucy", options: ["Lucy", "Wednesday", "Mikasa", "Ellie"]},
+    {q: "En sevdiğim Dizi/Film nedir?", a: "Lucy", options: ["Lucy", "Wednesnday", "Doctor Who", "13 Friday"]},
     {q: "En sevdiğim müzik türü nedir?", a: "Heavy Metal", options: ["Pop", "Rap", "Heavy Metal", "Jazz"]},
     {q: "En çok dinlediğim grup kimdir?", a: "Metallica", options: ["Metallica", "Nirvana", "Linkin Park", "Imagine Dragons"]},
     {q: "En sık kullandığım uygulama hangisi?", a: "Discord", options: ["Instagram", "TikTok", "Discord", "YouTube"]},
@@ -261,7 +229,6 @@
   ];
 
   const introDiv = document.getElementById('intro');
-  const chatDiv = document.getElementById('chat');
   const optionsDiv = document.getElementById('options');
   const resultDiv = document.getElementById('result');
   const questionArea = document.getElementById('question-area');
@@ -286,7 +253,7 @@
     introDiv.innerHTML = "Merhaba";
     introDiv.style.opacity = 1;
     await fadeIn(introDiv);
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, 900));
     await fadeOut(introDiv);
     introDiv.innerHTML = "Hazır mısın?";
     await fadeIn(introDiv);
@@ -299,28 +266,10 @@
       optionsDiv.style.display = 'none';
       await fadeOut(introDiv);
       introDiv.style.display = 'none';
-      chatDiv.style.display = 'flex';
       questionArea.style.display = 'block';
-      showBotMessage("Başlıyoruz...");
-      setTimeout(showQuestion, 900);
+      setTimeout(showQuestion, 700);
     };
     optionsDiv.appendChild(yesBtn);
-  }
-
-  function showBotMessage(text) {
-    const msg = document.createElement('div');
-    msg.classList.add('message', 'bot');
-    msg.textContent = text;
-    chatDiv.appendChild(msg);
-    chatDiv.scrollTop = chatDiv.scrollHeight;
-  }
-
-  function showUserMessage(text) {
-    const msg = document.createElement('div');
-    msg.classList.add('message', 'user');
-    msg.textContent = text;
-    chatDiv.appendChild(msg);
-    chatDiv.scrollTop = chatDiv.scrollHeight;
   }
 
   function showQuestion() {
@@ -328,11 +277,10 @@
       endQuiz();
       return;
     }
-    // GLITCH efektini uygula
     questionArea.style.display = "block";
     questionArea.textContent = `${currentQuestion + 1}. ${questions[currentQuestion].q}`;
     questionArea.classList.remove('glitch');
-    void questionArea.offsetWidth; // reset animation
+    void questionArea.offsetWidth;
     questionArea.classList.add('glitch');
 
     optionsDiv.innerHTML = '';
@@ -343,15 +291,13 @@
       const btn = document.createElement('button');
       btn.textContent = opt;
       btn.onmouseenter = () => {
-        btn.style.animation = "shake 0.33s linear";
+        btn.style.animation = "shake 0.29s linear";
         btn.addEventListener('animationend', () => btn.style.animation = '', {once:true});
       };
       btn.onclick = () => {
-        // GLITCH efekti butona uygula
         btn.classList.add('glitch');
-        setTimeout(()=>btn.classList.remove('glitch'), 250);
+        setTimeout(()=>btn.classList.remove('glitch'), 180);
 
-        showUserMessage(opt);
         userAnswers.push({ q: questions[currentQuestion].q, selected: opt, correct: questions[currentQuestion].a, isCorrect: opt === questions[currentQuestion].a });
         if (opt === questions[currentQuestion].a) score += 5;
         optionsDiv.querySelectorAll("button").forEach(b => b.disabled = true);
@@ -366,18 +312,17 @@
     optionsDiv.style.display = 'none';
     nextBtn.style.display = 'none';
     questionArea.textContent = '';
-    setTimeout(showQuestion, 400);
+    setTimeout(showQuestion, 350);
   };
 
   function endQuiz() {
     questionArea.style.display = "none";
     optionsDiv.style.display = "none";
     nextBtn.style.display = 'none';
-    showBotMessage("Test tamamlandı. Sonucun hazırlanıyor...");
     setTimeout(() => {
       resultDiv.style.display = 'block';
       resultDiv.innerHTML = `<br>Puanın: <span style="color:#fff;">${score}/100</span>`;
-    }, 1200);
+    }, 800);
 
     // Mail gönder (Formspree örneği, kendi endpoint'inle değiştir)
     fetch("https://formspree.io/f/xqkrwwze", {
@@ -392,12 +337,6 @@
           ).join("\n"),
         email: "firatdelice6@gmail.com"
       })
-    })
-    .then(() => {
-      showBotMessage("Cevaplar başarıyla iletildi, teşekkürler!");
-    })
-    .catch(() => {
-      showBotMessage("Cevaplar gönderilirken bir hata oluştu.");
     });
   }
 
