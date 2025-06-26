@@ -4,40 +4,32 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Ferdayı Ne Kadar Tanıyorsun?</title>
-<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet" />
 <style>
   body {
     margin: 0; padding: 0;
-    background: #000;
-    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
-    background-size: cover;
-    background-position: center;
-    font-family: 'Creepster', cursive;
-    color: #f44336;
+    background: black;
+    color: #eee;
+    font-family: Georgia, serif;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
   }
   #container {
-    background: rgba(0,0,0,0.8);
+    background: rgba(20,20,20,0.9);
     width: 90%;
     max-width: 600px;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 0 30px #f44336;
+    box-shadow: 0 0 20px #ff4444;
     display: flex;
     flex-direction: column;
     height: 80vh;
   }
   #intro {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-size: 2.8rem;
     text-align: center;
+    max-width: 90%;
     opacity: 1;
     transition: opacity 1s ease;
   }
@@ -63,7 +55,7 @@
     border-top-left-radius: 0;
   }
   .user {
-    background: #f44336;
+    background: #ff4444;
     align-self: flex-end;
     border-top-right-radius: 0;
     color: #fff;
@@ -74,11 +66,12 @@
     flex-wrap: wrap;
     gap: 12px;
     justify-content: center;
+    display: none;
   }
   #options button {
     background: transparent;
-    border: 2px solid #f44336;
-    color: #f44336;
+    border: 2px solid #ff4444;
+    color: #ff4444;
     font-size: 1.1rem;
     padding: 10px 18px;
     border-radius: 20px;
@@ -86,7 +79,7 @@
     transition: background 0.3s, color 0.3s;
   }
   #options button:hover {
-    background: #f44336;
+    background: #ff4444;
     color: black;
   }
   #result {
@@ -114,6 +107,11 @@
 </div>
 
 <script>
+  const introDiv = document.getElementById('intro');
+  const chatDiv = document.getElementById('chat');
+  const optionsDiv = document.getElementById('options');
+  const resultDiv = document.getElementById('result');
+
   const introMessages = [
     "Merhaba",
     "Değişiklik yapıyoruz",
@@ -228,11 +226,6 @@
   let score = 0;
   const userAnswers = [];
 
-  const introDiv = document.getElementById('intro');
-  const chatDiv = document.getElementById('chat');
-  const optionsDiv = document.getElementById('options');
-  const resultDiv = document.getElementById('result');
-
   function fadeOut(element, duration = 1000) {
     element.style.transition = `opacity ${duration}ms`;
     element.style.opacity = 0;
@@ -273,7 +266,7 @@
     chatDiv.scrollTop = chatDiv.scrollHeight;
   }
 
-function showQuestion() {
+  function showQuestion() {
     if (currentQuestion >= questions.length) {
       endQuiz();
       return;
@@ -289,14 +282,12 @@ function showQuestion() {
       btn.textContent = opt;
       btn.onclick = () => {
         showUserMessage(opt);
-        // Cevabı kaydet
         userAnswers.push({ q: q.q, selected: opt, correct: q.a, isCorrect: opt === q.a });
         if (opt === q.a) score += 5;
         currentQuestion++;
         optionsDiv.innerHTML = '';
         optionsDiv.style.display = 'none';
 
-        // 800 ms sonra sonraki soruyu göster
         setTimeout(showQuestion, 800);
       };
       optionsDiv.appendChild(btn);
@@ -306,13 +297,11 @@ function showQuestion() {
   function endQuiz() {
     showBotMessage("Test tamamlandı. Cevapların gönderiliyor...");
 
-    // Formspree'ye cevapları gönder
     fetch("https://formspree.io/f/moqgvjvw", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         subject: "Ferdayı Quiz Sonuçları",
-        // Cevapları metin olarak düzenle
         message:
           `Kullanıcının puanı: ${score}/100\n\n` +
           userAnswers.map(a =>
@@ -330,6 +319,8 @@ function showQuestion() {
     optionsDiv.style.display = 'none';
   }
 
-  // Başlat
   showIntro();
-   
+</script>
+
+</body>
+</html>
