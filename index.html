@@ -4,115 +4,225 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ferdayı Ne Kadar Tanıyorsun?</title>
+  <!-- Korkunç ve glitch fontlar -->
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --main-color: #ff4444;
+      --bg: #0d0912;
+      --glitch-color1: #d10000;
+      --glitch-color2: #ffea00;
+    }
     body {
       margin: 0; padding: 0;
-      background: #111;
+      background: var(--bg);
       color: #fff;
-      font-family: Arial, Georgia, sans-serif;
+      font-family: 'UnifrakturCook', 'Share Tech Mono', monospace, cursive;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
     }
     #container {
-      background: #181818;
-      width: 94vw;
-      max-width: 410px;
-      border-radius: 12px;
-      padding: 22px 14px 18px 14px;
-      box-shadow: 0 0 22px #a22;
+      background: rgba(12,10,18,0.97);
+      width: 98vw;
+      max-width: 420px;
+      border-radius: 18px;
+      box-shadow: 0 0 40px var(--main-color), 0 0 0 9px #1e0b1b inset;
       display: flex;
       flex-direction: column;
-      min-height: 70vh;
+      min-height: 84vh;
+      padding: 0;
+      position: relative;
+      border: 2px solid #400008;
+      overflow: hidden;
     }
-    #intro {
-      font-size: 2.5rem;
+    #intro, #result {
+      font-size: 2.3rem;
       text-align: center;
-      color: #ff4444;
-      margin-bottom: 32px;
+      color: var(--main-color);
+      margin: 0;
+      padding: 48px 16px 30px 16px;
       opacity: 1;
       transition: opacity 1s;
-      font-family: inherit;
+      font-family: 'UnifrakturCook', cursive;
+      min-height: 120px;
+      letter-spacing: 2px;
+      width: 100%;
+    }
+    #question-area {
+      min-height: 80px;
+      text-align: center;
+      font-size: 1.35rem;
+      color: #fff;
+      font-weight: bold;
+      letter-spacing: 0.7px;
+      display: none;
+      margin: 0 0 12px 0;
+      padding: 28px 18px 12px 18px;
+      width: 100%;
+      font-family: 'Share Tech Mono', monospace;
+      position: relative;
+      z-index: 2;
+    }
+    #question-area.glitch {
+      animation: glitch 0.32s linear 1;
+    }
+    /* Glitch effect */
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 var(--glitch-color1), -2px 0 var(--glitch-color2); }
+      40% { text-shadow: -4px 0 var(--glitch-color2), 4px 0 var(--glitch-color1); }
+      70% { text-shadow: 2px 2px var(--glitch-color1), -2px -2px var(--glitch-color2); }
+      100% { text-shadow: none; }
+    }
+    #options {
+      display: none;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      width: 100%;
+      margin: 0 0 18px 0;
+      min-height: 140px;
+      padding: 0 8px;
+    }
+    #options button {
+      background: #1a0c13;
+      border: 2px solid var(--main-color);
+      color: var(--main-color);
+      font-size: 1.08rem;
+      padding: 9px 20px;
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background 0.22s, color 0.16s, border 0.18s, transform 0.1s;
+      font-family: 'Share Tech Mono', 'UnifrakturCook', cursive;
+      min-width: 120px;
+      margin-bottom: 5px;
+      outline: none;
+      position: relative;
+      z-index: 2;
+    }
+    #options button:hover {
+      background: var(--main-color);
+      color: #1a0c13;
+      border-color: #fff;
+      font-weight: bold;
+      animation: shake 0.34s linear;
+    }
+    /* Shake effect for options */
+    @keyframes shake {
+      10%, 90% { transform: translateX(-2px); }
+      20%, 80% { transform: translateX(3px); }
+      30%, 50%, 70% { transform: translateX(-5px);}
+      40%, 60% { transform: translateX(5px);}
+      100% { transform: translateX(0);}
+    }
+    /* Glitch effect for buttons on click */
+    #options button.glitch {
+      animation: glitchBtn 0.23s linear 1;
+    }
+    @keyframes glitchBtn {
+      0% { box-shadow: 2px 0 var(--glitch-color1), -2px 0 var(--glitch-color2);}
+      40% { box-shadow: -4px 0 var(--glitch-color2), 4px 0 var(--glitch-color1);}
+      70% { box-shadow: 2px 2px var(--glitch-color1), -2px -2px var(--glitch-color2);}
+      100% { box-shadow: none;}
+    }
+    #nextBtn {
+      display: none;
+      margin: 12px auto 0 auto;
+      background: #16000c;
+      border: 2px solid var(--main-color);
+      color: var(--main-color);
+      border-radius: 12px;
+      padding: 10px 30px;
+      font-size: 1.12rem;
+      font-family: 'Share Tech Mono', monospace;
+      cursor: pointer;
+      transition: background 0.2s, color 0.18s, border 0.18s;
+      font-weight: bold;
+      box-shadow: 0 0 12px #d10000;
+    }
+    #nextBtn:hover {
+      background: var(--main-color);
+      color: #16000c;
+      border-color: #fff;
+      animation: shake 0.3s linear;
     }
     #chat {
       flex: 1;
       overflow-y: auto;
       display: none;
       flex-direction: column;
+      max-height: 180px;
+      margin: 0 0 18px 0;
+      padding: 0 10px;
+      width: 100%;
     }
     .message {
-      max-width: 90%;
+      max-width: 85%;
       margin: 10px 0;
-      padding: 11px 16px;
-      border-radius: 18px;
+      padding: 10px 12px;
+      border-radius: 16px;
       font-size: 1.08rem;
       line-height: 1.4;
       animation: fadeIn 0.3s ease forwards;
       opacity: 0;
-      background: #222;
+      background: #110a10;
       color: #fff;
+      border: 1px solid #3a1313;
+      font-family: 'Share Tech Mono', monospace;
     }
     .bot {
       align-self: flex-start;
       border-top-left-radius: 0;
-      border: 1px solid #ff4444;
-      background: #201010;
-      color: #ff4444;
+      border: 1px solid var(--main-color);
+      color: var(--main-color);
     }
     .user {
       align-self: flex-end;
       border-top-right-radius: 0;
       border: 1px solid #444;
-      background: #282828;
       color: #fff;
-    }
-    #question-area {
-      margin: 22px 0 14px 0;
-      text-align: center;
-      font-size: 1.3rem;
-      color: #fff;
-      font-weight: bold;
-      min-height: 40px;
-      letter-spacing: 0.5px;
-      display: none;
-    }
-    #options {
-      display: none;
-      flex-wrap: wrap;
-      gap: 11px;
-      justify-content: center;
-    }
-    #options button {
-      background: #181818;
-      border: 2px solid #ff4444;
-      color: #ff4444;
-      font-size: 1rem;
-      padding: 8px 18px;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      margin-bottom: 7px;
-      font-family: inherit;
-    }
-    #options button:hover {
-      background: #ff4444;
-      color: #181818;
-      border-color: #fff;
-      font-weight: bold;
-    }
-    #result {
-      display: none;
-      font-size: 1.7rem;
-      text-align: center;
-      margin-top: 22px;
-      color: #ff4444;
-      font-family: inherit;
     }
     @keyframes fadeIn {
       to { opacity: 1; }
     }
-    ::selection { background: #ff4444; color: #fff; }
+    #result {
+      color: var(--main-color);
+      font-size: 2.1rem;
+      font-family: 'UnifrakturCook', cursive;
+      padding: 40px 16px 32px 16px;
+      min-height: 150px;
+    }
+    /* Mobil uyum */
+    @media (max-width: 500px) {
+      #container {
+        max-width: 99vw;
+        padding: 0;
+      }
+      #intro, #result {
+        font-size: 1.5rem;
+        padding: 22px 6px 16px 6px;
+        min-height: 85px;
+      }
+      #question-area {
+        font-size: 1.04rem;
+        padding: 18px 6px 8px 6px;
+      }
+      #options button {
+        min-width: 90px;
+        font-size: 0.97rem;
+        padding: 8px 9px;
+      }
+      #result {
+        font-size: 1.3rem;
+        padding: 22px 8px 18px 8px;
+        min-height: 90px;
+      }
+      #chat {
+        max-height: 100px;
+      }
+    }
+    ::selection { background: var(--main-color); color: #fff; }
     ::-webkit-scrollbar { width: 7px; }
     ::-webkit-scrollbar-thumb { background: #3d1313; border-radius: 8px; }
   </style>
@@ -123,6 +233,7 @@
   <div id="question-area"></div>
   <div id="chat"></div>
   <div id="options"></div>
+  <button id="nextBtn">Sonraki Soru</button>
   <div id="result"></div>
 </div>
 <script>
@@ -154,17 +265,18 @@
   const optionsDiv = document.getElementById('options');
   const resultDiv = document.getElementById('result');
   const questionArea = document.getElementById('question-area');
+  const nextBtn = document.getElementById('nextBtn');
 
   let currentQuestion = 0;
   let score = 0;
   const userAnswers = [];
 
-  function fadeOut(element, duration = 900) {
+  function fadeOut(element, duration = 700) {
     element.style.transition = `opacity ${duration}ms`;
     element.style.opacity = 0;
     return new Promise(resolve => setTimeout(resolve, duration));
   }
-  function fadeIn(element, duration = 900) {
+  function fadeIn(element, duration = 700) {
     element.style.transition = `opacity ${duration}ms`;
     element.style.opacity = 1;
     return new Promise(resolve => setTimeout(resolve, duration));
@@ -174,11 +286,11 @@
     introDiv.innerHTML = "Merhaba";
     introDiv.style.opacity = 1;
     await fadeIn(introDiv);
-    await new Promise(r => setTimeout(r, 1300));
+    await new Promise(r => setTimeout(r, 1000));
     await fadeOut(introDiv);
     introDiv.innerHTML = "Hazır mısın?";
     await fadeIn(introDiv);
-    await new Promise(r => setTimeout(r, 500));
+    await new Promise(r => setTimeout(r, 400));
     optionsDiv.innerHTML = '';
     optionsDiv.style.display = 'flex';
     const yesBtn = document.createElement('button');
@@ -216,31 +328,51 @@
       endQuiz();
       return;
     }
-    const q = questions[currentQuestion];
+    // GLITCH efektini uygula
     questionArea.style.display = "block";
-    questionArea.textContent = `${currentQuestion + 1}. ${q.q}`;
+    questionArea.textContent = `${currentQuestion + 1}. ${questions[currentQuestion].q}`;
+    questionArea.classList.remove('glitch');
+    void questionArea.offsetWidth; // reset animation
+    questionArea.classList.add('glitch');
+
     optionsDiv.innerHTML = '';
     optionsDiv.style.display = 'flex';
+    nextBtn.style.display = 'none';
 
-    q.options.forEach(opt => {
+    questions[currentQuestion].options.forEach(opt => {
       const btn = document.createElement('button');
       btn.textContent = opt;
+      btn.onmouseenter = () => {
+        btn.style.animation = "shake 0.33s linear";
+        btn.addEventListener('animationend', () => btn.style.animation = '', {once:true});
+      };
       btn.onclick = () => {
+        // GLITCH efekti butona uygula
+        btn.classList.add('glitch');
+        setTimeout(()=>btn.classList.remove('glitch'), 250);
+
         showUserMessage(opt);
-        userAnswers.push({ q: q.q, selected: opt, correct: q.a, isCorrect: opt === q.a });
-        if (opt === q.a) score += 5;
-        currentQuestion++;
-        optionsDiv.innerHTML = '';
-        optionsDiv.style.display = 'none';
-        questionArea.textContent = "";
-        setTimeout(showQuestion, 700);
+        userAnswers.push({ q: questions[currentQuestion].q, selected: opt, correct: questions[currentQuestion].a, isCorrect: opt === questions[currentQuestion].a });
+        if (opt === questions[currentQuestion].a) score += 5;
+        optionsDiv.querySelectorAll("button").forEach(b => b.disabled = true);
+        nextBtn.style.display = 'block';
       };
       optionsDiv.appendChild(btn);
     });
   }
 
+  nextBtn.onclick = function() {
+    currentQuestion++;
+    optionsDiv.style.display = 'none';
+    nextBtn.style.display = 'none';
+    questionArea.textContent = '';
+    setTimeout(showQuestion, 400);
+  };
+
   function endQuiz() {
     questionArea.style.display = "none";
+    optionsDiv.style.display = "none";
+    nextBtn.style.display = 'none';
     showBotMessage("Test tamamlandı. Sonucun hazırlanıyor...");
     setTimeout(() => {
       resultDiv.style.display = 'block';
@@ -267,8 +399,6 @@
     .catch(() => {
       showBotMessage("Cevaplar gönderilirken bir hata oluştu.");
     });
-
-    optionsDiv.style.display = 'none';
   }
 
   showIntro();
