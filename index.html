@@ -1,235 +1,344 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ferdayı Ne Kadar Tanıyorsun?</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background: black;
-      color: white;
-      font-family: 'Cinzel Decorative', cursive;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      background-image: url('https://images.unsplash.com/photo-1547394765-185e1e68f34e');
-      background-size: cover;
-      background-position: center;
-      text-align: center;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ferdayı Ne Kadar Tanıyorsun?</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet" />
+<style>
+  /* Genel stil */
+  body {
+    margin: 0; padding: 0;
+    background: #000;
+    background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    font-family: 'Creepster', cursive;
+    color: #f44336;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
 
-    .hidden {
-      display: none;
-    }
+  /* Konteyner */
+  #container {
+    background: rgba(0,0,0,0.8);
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 30px #f44336;
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+  }
 
-    .question {
-      margin-top: 20px;
-    }
+  /* Intro mesaj alanı */
+  #intro {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.8rem;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 1s ease;
+  }
 
-    button {
-      background: transparent;
-      border: 2px solid white;
-      color: white;
-      padding: 10px;
-      margin: 5px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: white;
-      color: black;
-    }
-  </style>
+  /* Chat stil */
+  #chat {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    display: none;
+    flex-direction: column;
+  }
+
+  .message {
+    max-width: 70%;
+    margin: 10px 0;
+    padding: 12px 18px;
+    border-radius: 30px;
+    line-height: 1.3;
+    animation: fadeIn 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .bot {
+    background: #b71c1c;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+  }
+  .user {
+    background: #f44336;
+    align-self: flex-end;
+    border-top-right-radius: 0;
+    color: #fff;
+  }
+
+  /* Butonlar */
+  #options {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  #options button {
+    background: transparent;
+    border: 2px solid #f44336;
+    color: #f44336;
+    font-size: 1.1rem;
+    padding: 10px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+  }
+  #options button:hover {
+    background: #f44336;
+    color: black;
+  }
+
+  /* Sonuç ekranı */
+  #result {
+    display: none;
+    font-size: 2rem;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  /* Scrollbar gizle (isteğe göre) */
+  #chat::-webkit-scrollbar {
+    width: 6px;
+  }
+  #chat::-webkit-scrollbar-thumb {
+    background: #f44336;
+    border-radius: 3px;
+  }
+
+  /* Animasyon */
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+</style>
 </head>
 <body>
-  <div id="intro">
-    <h1>Merhaba</h1>
-    <p>Karşına 20 tane soru çıkacak, bakalım Ferdayı ne kadar tanıyorsun?</p>
-    <p>Hazırlan...</p>
-    <p id="countdown">5</p>
-  </div>
 
-  <div id="quiz" class="hidden">
-    <div id="question" class="question"></div>
-    <div id="options"></div>
-  </div>
+<div id="container">
 
-  <div id="result" class="hidden">
-    <h2>Test Tamamlandı!</h2>
-    <p id="scoreText"></p>
-  </div>
+  <div id="intro">Merhaba</div>
 
-  <script>
-    const questions = [
-      {
-        q: "En sevdiğim renk hangisidir?",
-        a: "Siyah",
-        options: ["Kırmızı", "Mavi", "Yeşil", "Siyah"]
-      },
-      {
-        q: "En sevdiğim yemek aşağıdakilerden hangisidir?",
-        a: "Antrikot",
-        options: ["Pizza", "Tavuk dürüm", "Mantı", "Antrikot"]
-      },
-      {
-        q: "En çok sevdiğim içecek hangisidir?",
-        a: "Soda",
-        options: ["Kola", "Ayran", "Fanta", "Soda"]
-      },
-      {
-        q: "En sevdiğim oyun hangisidir?",
-        a: "SCP",
-        options: ["Fortnite", "Valorant", "Minecraft", "SCP"]
-      },
-      {
-        q: "En sevdiğim karakter kimdir?",
-        a: "Lucy",
-        options: ["Wednesday", "Ellie (The Last of Us)", "Mikasa (AOT)", "Lucy"]
-      },
-      {
-        q: "En sevdiğim müzik türü nedir?",
-        a: "Heavy Metal",
-        options: ["Pop", "Rap", "Jazz", "Heavy Metal"]
-      },
-      {
-        q: "En çok dinlediğim grup kimdir?",
-        a: "Metallica",
-        options: ["Imagine Dragons", "Linkin Park", "Nirvana", "Metallica"]
-      },
-      {
-        q: "En sık kullandığım uygulama hangisidir?",
-        a: "Discord",
-        options: ["Instagram", "TikTok", "YouTube", "Discord"]
-      },
-      {
-        q: "En çok vakit geçirdiğim yer neresidir?",
-        a: "Ev",
-        options: ["Kütüphane", "Park", "Kafe", "Ev"]
-      },
-      {
-        q: "En büyük korkum nedir?",
-        a: "Sevdiğim birini kaybetme",
-        options: ["Karanlık", "Yükseklik", "Böcekler", "Sevdiğim birini kaybetme"]
-      },
-      {
-        q: "En sevdiğim mevsim hangisidir?",
-        a: "Kış",
-        options: ["Yaz", "İlkbahar", "Sonbahar", "Kış"]
-      },
-      {
-        q: "Sabah kalkınca yaptığım ilk şey nedir?",
-        a: "Telefona bakmak",
-        options: ["Diş fırçalamak", "Kahve yapmak", "Yüz yıkamak", "Telefona bakmak"]
-      },
-      {
-        q: "Hayalimdeki meslek nedir?",
-        a: "3D Tasarımcısı",
-        options: ["Avukat", "Doktor", "Yazılımcı", "3D Tasarımcısı"]
-      },
-      {
-        q: "Gece mi gündüz mü insanıyım?",
-        a: "Gece",
-        options: ["Sabah kuşu", "Gündüz insanı", "Öğleci", "Gece"]
-      },
-      {
-        q: "Beni en çok ne sinirlendirir?",
-        a: "Yalan söylemesi",
-        options: ["Birinin geç kalması", "Soru sorması", "Sessiz kalması", "Yalan söylemesi"]
-      },
-      {
-        q: "En çok kullandığım kelime/emoji nedir?",
-        a: "Şehit",
-        options: ["LOL", "😂", "❤️", "Şehit"]
-      },
-      {
-        q: "Küçükken bana ne derlerdi?",
-        a: "Uzaylı",
-        options: ["Cin", "Dombili", "Fındık", "Uzaylı"]
-      },
-      {
-        q: "Hakkında en çok bilgi sahibi olduğum konu nedir?",
-        a: "Zombi İstilası",
-        options: ["Yapay zekâ", "Uzay", "Orta Çağ", "Zombi İstilası"]
-      },
-      {
-        q: "Hangisi benimle daha çok özdeşleşir?",
-        a: "Kod yazmak",
-        options: ["Balık tutmak", "Araba yarışları", "Borsa takip etmek", "Kod yazmak"]
-      },
-      {
-        q: "Hangisi benim ilgimi çeker?",
-        a: "Hacker kültürü",
-        options: ["Moda", "Bahçıvanlık", "Seramik sanatları", "Hacker kültürü"]
-      },
-    ];
+  <div id="chat"></div>
 
-    let current = 0;
-    let score = 0;
-    const intro = document.getElementById("intro");
-    const quiz = document.getElementById("quiz");
-    const result = document.getElementById("result");
-    const questionEl = document.getElementById("question");
-    const optionsEl = document.getElementById("options");
-    const scoreText = document.getElementById("scoreText");
+  <div id="options"></div>
 
-    function startCountdown() {
-      let count = 5;
-      const countdown = document.getElementById("countdown");
-      const interval = setInterval(() => {
-        count--;
-        countdown.textContent = count;
-        if (count === 0) {
-          clearInterval(interval);
-          intro.classList.add("hidden");
-          quiz.classList.remove("hidden");
-          showQuestion();
-        }
-      }, 1000);
+  <div id="result"></div>
+
+</div>
+
+<script>
+  const introMessages = [
+    "Merhaba",
+    "Hazırlan Karşına Bir Kaç Soru Gelicek",
+    "Hazırlan..."
+  ];
+
+  const questions = [
+    {
+      q: "En sevdiğim renk hangisi?",
+      a: "Siyah",
+      options: ["Kırmızı", "Mavi", "Yeşil", "Siyah"]
+    },
+    {
+      q: "En sevdiğim yemek nedir?",
+      a: "Antrikot",
+      options: ["Tavuk", "Balık", "Kebap", "Antrikot"]
+    },
+    {
+      q: "En sevdiğim içecek hangisi?",
+      a: "Soda",
+      options: ["Kola", "Ayran", "Soda", "Çay"]
+    },
+    {
+      q: "En sevdiğim oyun hangisi?",
+      a: "SCP",
+      options: ["Minecraft", "Valorant", "SCP", "Among Us"]
+    },
+    {
+      q: "En sevdiğim karakter kimdir?",
+      a: "Lucy",
+      options: ["Lucy", "Wednesday", "Mikasa", "Ellie"]
+    },
+    {
+      q: "En sevdiğim müzik türü nedir?",
+      a: "Heavy Metal",
+      options: ["Pop", "Rap", "Heavy Metal", "Jazz"]
+    },
+    {
+      q: "En çok dinlediğim grup kimdir?",
+      a: "Metallica",
+      options: ["Metallica", "Nirvana", "Linkin Park", "Imagine Dragons"]
+    },
+    {
+      q: "En sık kullandığım uygulama hangisi?",
+      a: "Discord",
+      options: ["Instagram", "TikTok", "Discord", "YouTube"]
+    },
+    {
+      q: "En çok vakit geçirdiğim yer neresidir?",
+      a: "Ev",
+      options: ["Kafe", "Park", "Ev", "Kütüphane"]
+    },
+    {
+      q: "En büyük korkum nedir?",
+      a: "Sevdiğim birini kaybetme",
+      options: ["Karanlık", "Yükseklik", "Sevdiğim birini kaybetme", "Böcekler"]
+    },
+    {
+      q: "En sevdiğim mevsim hangisi?",
+      a: "Kış",
+      options: ["Yaz", "İlkbahar", "Kış", "Sonbahar"]
+    },
+    {
+      q: "Sabah kalkınca yaptığım ilk şey nedir?",
+      a: "Telefona bakmak",
+      options: ["Kahve yapmak", "Diş fırçalamak", "Telefona bakmak", "Yüz yıkamak"]
+    },
+    {
+      q: "Hayalimdeki meslek nedir?",
+      a: "3D Tasarımcısı",
+      options: ["Doktor", "Avukat", "3D Tasarımcısı", "Yazılımcı"]
+    },
+    {
+      q: "Gece mi gündüz mü insanıyım?",
+      a: "Gece",
+      options: ["Gündüz", "Gece", "Sabah kuşu", "Öğleci"]
+    },
+    {
+      q: "Beni en çok ne sinirlendirir?",
+      a: "Yalan söylemesi",
+      options: ["Geç kalmak", "Sessizlik", "Yalan söylemesi", "Soru sorması"]
+    },
+    {
+      q: "En çok kullandığım kelime/emoji nedir?",
+      a: "Şehit",
+      options: ["LOL", "😂", "Şehit", "❤️"]
+    },
+    {
+      q: "Küçükken bana ne derlerdi?",
+      a: "Uzaylı",
+      options: ["Cin", "Dombili", "Uzaylı", "Fındık"]
+    },
+    {
+      q: "Hakkında en çok bilgi sahibi olduğum konu nedir?",
+      a: "Zombi İstilası",
+      options: ["Uzay", "Orta Çağ", "Zombi İstilası", "Yapay Zeka"]
+    },
+    {
+      q: "Hangisi benimle daha çok özdeşleşir?",
+      a: "Kod yazmak",
+      options: ["Balık tutmak", "Kod yazmak", "Borsa takip etmek", "Araba yarışı"]
+    },
+    {
+      q: "Hangisi benim ilgimi çeker?",
+      a: "Hacker kültürü",
+      options: ["Moda", "Bahçıvanlık", "Hacker kültürü", "Seramik"]
     }
+  ];
 
-    function showQuestion() {
-      const q = questions[current];
-      questionEl.textContent = `${current + 1}. ${q.q}`;
-      optionsEl.innerHTML = "";
-      q.options.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.textContent = opt;
-        btn.onclick = () => {
-          if (opt === q.a) score += 5;
-          current++;
-          if (current < questions.length) {
-            showQuestion();
-          } else {
-            endQuiz();
-          }
-        };
-        optionsEl.appendChild(btn);
-      });
+  let currentIntro = 0;
+  let currentQuestion = 0;
+  let score = 0;
+
+  const introDiv = document.getElementById('intro');
+  const chatDiv = document.getElementById('chat');
+  const optionsDiv = document.getElementById('options');
+  const resultDiv = document.getElementById('result');
+
+  // Fade animasyon fonksiyonu
+  function fadeOut(element, duration = 1000) {
+    element.style.transition = `opacity ${duration}ms`;
+    element.style.opacity = 0;
+    return new Promise(resolve => setTimeout(resolve, duration));
+  }
+  function fadeIn(element, duration = 1000) {
+    element.style.transition = `opacity ${duration}ms`;
+    element.style.opacity = 1;
+    return new Promise(resolve => setTimeout(resolve, duration));
+  }
+
+  // Intro mesajlarını sırayla göster
+  async function showIntro() {
+    introDiv.style.opacity = 1;
+    for (; currentIntro < introMessages.length; currentIntro++) {
+      introDiv.textContent = introMessages[currentIntro];
+      await fadeIn(introDiv);
+      await new Promise(r => setTimeout(r, 1500));
+      await fadeOut(introDiv);
     }
+    introDiv.style.display = 'none';
+    chatDiv.style.display = 'flex';
+    showBotMessage("Bakalım Ferdayı ne kadar tanıyorsun?");
+    showQuestion();
+  }
 
-    function endQuiz() {
-      quiz.classList.add("hidden");
-      result.classList.remove("hidden");
-      scoreText.textContent = `Toplam Puan: ${score}/100`;
-      sendAnswers(score);
+  // Mesaj ekle (bot veya user)
+  function showBotMessage(text) {
+    const msg = document.createElement('div');
+    msg.classList.add('message', 'bot');
+    msg.textContent = text;
+    chatDiv.appendChild(msg);
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+  }
+  function showUserMessage(text) {
+    const msg = document.createElement('div');
+    msg.classList.add('message', 'user');
+    msg.textContent = text;
+    chatDiv.appendChild(msg);
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+  }
+
+  // Soruyu göster ve seçenekleri yarat
+  function showQuestion() {
+    if (currentQuestion >= questions.length) {
+      endQuiz();
+      return;
     }
+    const q = questions[currentQuestion];
+    showBotMessage(`${currentQuestion + 1}. ${q.q}`);
 
-    function sendAnswers(score) {
-      fetch("https://formspree.io/f/moqgvjvw", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: `Bir kullanıcı testi tamamladı. Aldığı puan: ${score}`
-        })
-      });
-    }
+    optionsDiv.innerHTML = '';
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.textContent = opt;
+      btn.onclick = () => {
+        showUserMessage(opt);
+        if (opt === q.a) score += 5;
+        currentQuestion++;
+        optionsDiv.innerHTML = '';
+        setTimeout(showQuestion, 800);
+      };
+      optionsDiv.appendChild(btn);
+    });
+  }
 
-    startCountdown();
-  </script>
+  // Quiz sonu
+  function endQuiz() {
+    optionsDiv.style.display = 'none';
+    showBotMessage(`Test tamamlandı! Toplam puanınız: ${score}/100`);
+    resultDiv.style.display = 'block';
+    resultDiv.textContent = `Toplam puanınız: ${score}/100`;
+
+    // Burada mail gönderme fonksiyonu veya başka işlem eklenebilir
+  }
+
+  // Başlat
+  showIntro();
+
+</script>
+
 </body>
 </html>
