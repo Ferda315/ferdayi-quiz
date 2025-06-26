@@ -6,7 +6,6 @@
 <title>Ferdayı Ne Kadar Tanıyorsun?</title>
 <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet" />
 <style>
-  /* Genel stil */
   body {
     margin: 0; padding: 0;
     background: #000;
@@ -21,8 +20,6 @@
     align-items: center;
     flex-direction: column;
   }
-
-  /* Konteyner */
   #container {
     background: rgba(0,0,0,0.8);
     width: 90%;
@@ -34,8 +31,6 @@
     flex-direction: column;
     height: 80vh;
   }
-
-  /* Intro mesaj alanı */
   #intro {
     flex: 1;
     display: flex;
@@ -46,8 +41,6 @@
     opacity: 1;
     transition: opacity 1s ease;
   }
-
-  /* Chat stil */
   #chat {
     flex: 1;
     overflow-y: auto;
@@ -55,7 +48,6 @@
     display: none;
     flex-direction: column;
   }
-
   .message {
     max-width: 70%;
     margin: 10px 0;
@@ -65,7 +57,6 @@
     animation: fadeIn 0.4s ease forwards;
     opacity: 0;
   }
-
   .bot {
     background: #b71c1c;
     align-self: flex-start;
@@ -77,8 +68,6 @@
     border-top-right-radius: 0;
     color: #fff;
   }
-
-  /* Butonlar */
   #options {
     margin-top: auto;
     display: flex;
@@ -100,33 +89,18 @@
     background: #f44336;
     color: black;
   }
-
-  /* Sonuç ekranı */
   #result {
     display: none;
     font-size: 2rem;
     text-align: center;
     margin-top: 20px;
   }
-
-  /* Scrollbar gizle (isteğe göre) */
-  #chat::-webkit-scrollbar {
-    width: 6px;
-  }
-  #chat::-webkit-scrollbar-thumb {
-    background: #f44336;
-    border-radius: 3px;
-  }
-
-  /* Animasyon */
   @keyframes fadeIn {
     to { opacity: 1; }
   }
-
 </style>
 </head>
 <body>
-
 <div id="container">
 
   <div id="intro">Merhaba</div>
@@ -142,7 +116,7 @@
 <script>
   const introMessages = [
     "Merhaba",
-    "Hazırlan Karşına Bir Kaç Soru Gelicek",
+    "Değişiklik yapıyoruz",
     "Hazırlan..."
   ];
 
@@ -252,13 +226,13 @@
   let currentIntro = 0;
   let currentQuestion = 0;
   let score = 0;
+  const userAnswers = [];
 
   const introDiv = document.getElementById('intro');
   const chatDiv = document.getElementById('chat');
   const optionsDiv = document.getElementById('options');
   const resultDiv = document.getElementById('result');
 
-  // Fade animasyon fonksiyonu
   function fadeOut(element, duration = 1000) {
     element.style.transition = `opacity ${duration}ms`;
     element.style.opacity = 0;
@@ -270,7 +244,6 @@
     return new Promise(resolve => setTimeout(resolve, duration));
   }
 
-  // Intro mesajlarını sırayla göster
   async function showIntro() {
     introDiv.style.opacity = 1;
     for (; currentIntro < introMessages.length; currentIntro++) {
@@ -285,7 +258,6 @@
     showQuestion();
   }
 
-  // Mesaj ekle (bot veya user)
   function showBotMessage(text) {
     const msg = document.createElement('div');
     msg.classList.add('message', 'bot');
@@ -301,8 +273,7 @@
     chatDiv.scrollTop = chatDiv.scrollHeight;
   }
 
-  // Soruyu göster ve seçenekleri yarat
-  function showQuestion() {
+function showQuestion() {
     if (currentQuestion >= questions.length) {
       endQuiz();
       return;
@@ -311,34 +282,54 @@
     showBotMessage(`${currentQuestion + 1}. ${q.q}`);
 
     optionsDiv.innerHTML = '';
+    optionsDiv.style.display = 'flex';
+
     q.options.forEach(opt => {
       const btn = document.createElement('button');
       btn.textContent = opt;
       btn.onclick = () => {
         showUserMessage(opt);
+        // Cevabı kaydet
+        userAnswers.push({ q: q.q, selected: opt, correct: q.a, isCorrect: opt === q.a });
         if (opt === q.a) score += 5;
         currentQuestion++;
         optionsDiv.innerHTML = '';
+        optionsDiv.style.display = 'none';
+
+        // 800 ms sonra sonraki soruyu göster
         setTimeout(showQuestion, 800);
       };
       optionsDiv.appendChild(btn);
     });
   }
 
-  // Quiz sonu
   function endQuiz() {
-    optionsDiv.style.display = 'none';
-    showBotMessage(`Test tamamlandı! Toplam puanınız: ${score}/100`);
-    resultDiv.style.display = 'block';
-    resultDiv.textContent = `Toplam puanınız: ${score}/100`;
+    showBotMessage("Test tamamlandı. Cevapların gönderiliyor...");
 
-    // Burada mail gönderme fonksiyonu veya başka işlem eklenebilir
+    // Formspree'ye cevapları gönder
+    fetch("https://formspree.io/f/moqgvjvw", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subject: "Ferdayı Quiz Sonuçları",
+        // Cevapları metin olarak düzenle
+        message:
+          `Kullanıcının puanı: ${score}/100\n\n` +
+          userAnswers.map(a =>
+            `Soru: ${a.q}\nSeçilen cevap: ${a.selected} (${a.isCorrect ? "Doğru" : "Yanlış"})\n`
+          ).join("\n")
+      })
+    })
+    .then(() => {
+      showBotMessage("Cevaplar başarıyla gönderildi, teşekkürler!");
+    })
+    .catch(() => {
+      showBotMessage("Cevaplar gönderilirken bir hata oluştu.");
+    });
+
+    optionsDiv.style.display = 'none';
   }
 
   // Başlat
   showIntro();
-
-</script>
-
-</body>
-</html>
+   
